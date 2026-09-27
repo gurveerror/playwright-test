@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Loan Planner</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1C2333; --paper:#F7F5F0; --panel:#FFFFFF; --line:#E4E0D6;
+  --teal:#3E7C74; --gold:#C9A455; --muted:#6B7180;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ --ink:#EDEAE1; --paper:#14181F; --panel:#1B212C; --line:#2B3140; --muted:#9AA0AE; }
+}
+:root[data-theme="dark"]{ --ink:#EDEAE1; --paper:#14181F; --panel:#1B212C; --line:#2B3140; --muted:#9AA0AE; }
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,sans-serif;line-height:1.5;}
+.wrap{max-width:1100px;margin:0 auto;padding:2.5rem 1.5rem 4rem;}
+h1{font-family:Fraunces,serif;font-weight:600;font-size:clamp(1.7rem,3vw,2.3rem);margin:0 0 .25rem;}
+.sub{color:var(--muted);margin:0 0 2rem;font-size:.95rem;}
+.grid{display:grid;grid-template-columns:1fr;gap:1.5rem;}
+@media(min-width:840px){.grid{grid-template-columns:340px 1fr;}}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:1.5rem;}
+label{display:block;font-size:.82rem;color:var(--muted);margin:1.1rem 0 .35rem;}
+label:first-child{margin-top:0}
+.row{display:flex;align-items:baseline;justify-content:space-between;}
+.row output{font-family:Fraunces,serif;font-weight:600;color:var(--teal);}
+input[type=range]{width:100%;accent-color:var(--teal);margin-top:.4rem;}
+input[type=number]{width:100%;padding:.5rem .6rem;border:1px solid var(--line);border-radius:6px;background:var(--paper);color:var(--ink);font:inherit;margin-top:.3rem;}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem;}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:1.1rem;}
+.card .k{font-size:.78rem;color:var(--muted);}
+.card .v{font-family:Fraunces,serif;font-weight:600;font-size:1.4rem;margin-top:.25rem;}
+.v.gold{color:var(--gold)}
+.chart-panel{display:grid;grid-template-columns:1fr;gap:1.5rem;margin-bottom:1.5rem;}
+@media(min-width:640px){.chart-panel{grid-template-columns:220px 1fr;align-items:center;}}
+h2{font-family:Fraunces,serif;font-weight:600;font-size:1.1rem;margin:0 0 1rem;}
+table{width:100%;border-collapse:collapse;font-size:.86rem;}
+th,td{text-align:right;padding:.5rem .6rem;border-bottom:1px solid var(--line);}
+th:first-child,td:first-child{text-align:left;}
+th{color:var(--muted);font-weight:500;font-size:.78rem;}
+.tablewrap{overflow-x:auto;}
+.tabs{display:flex;gap:.4rem;margin-bottom:1rem;flex-wrap:wrap;}
+.tabs button{border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:.35rem .8rem;border-radius:20px;font:inherit;font-size:.8rem;cursor:pointer;}
+.tabs button.active{background:var(--teal);color:#fff;border-color:var(--teal);}
+.legend{display:flex;gap:1.2rem;margin-top:.8rem;font-size:.8rem;color:var(--muted);}
+.legend span{display:inline-flex;align-items:center;gap:.4rem;}
+.legend i{width:10px;height:10px;border-radius:50%;display:inline-block;}
+.bar-label{font-size:.65rem;fill:var(--muted);font-family:Inter,sans-serif;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Loan Planner</h1>
+  <p class="sub">Set your loan terms and see the repayment breakdown.</p>
+  <div class="grid">
+    <div class="panel">
+      <label class="row">Loan amount <output id="amtOut"></output></label>
+      <input type="range" id="amt" data-testid="amt-range" min="50000" max="10000000" step="10000" value="2500000">
+      <input type="number" id="amtNum" data-testid="amt-input" value="2500000">
+
+      <label class="row">Interest rate (annual %) <output id="rateOut"></output></label>
+      <input type="range" id="rate" data-testid="rate-range" min="1" max="20" step="0.1" value="8.5">
+      <input type="number" id="rateNum" data-testid="rate-input" value="8.5" step="0.1">
+
+      <label class="row">Tenure (years) <output id="yrsOut"></output></label>
+      <input type="range" id="yrs" data-testid="yrs-range" min="1" max="30" step="1" value="15">
+      <input type="number" id="yrsNum" data-testid="yrs-input" value="15">
+    </div>
+
+    <div>
+      <div class="cards">
+        <div class="card"><div class="k">Monthly EMI</div><div class="v" id="emiVal" data-testid="emi-value">–</div></div>
+        <div class="card"><div class="k">Total interest</div><div class="v" id="intVal" data-testid="interest-value">–</div></div>
+        <div class="card"><div class="k">Total payment</div><div class="v gold" id="totVal" data-testid="total-value">–</div></div>
+      </div>
+      <div class="panel chart-panel">
+        <div>
+          <svg id="pie" data-testid="pie-chart" viewBox="0 0 200 200" width="180" height="180"></svg>
+          <div class="legend">
+            <span><i style="background:var(--teal)"></i>Principal <b data-testid="pie-principal-pct"></b></span>
+            <span><i style="background:var(--gold)"></i>Interest <b data-testid="pie-interest-pct"></b></span>
+          </div>
+        </div>
+        <svg id="bar" data-testid="bar-chart" viewBox="0 0 500 200" width="100%" height="200"></svg>
+      </div>
+      <div class="panel">
+        <h2>Yearly repayment schedule</h2>
+        <div class="tabs" id="tabs" data-testid="year-tabs"></div>
+        <div class="tablewrap">
+        <table data-testid="schedule-table">
+          <thead><tr><th>Month</th><th>EMI</th><th>Principal</th><th>Interest</th><th>Balance</th></tr></thead>
+          <tbody id="tbody" data-testid="schedule-body"></tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const fmt=n=>'₹'+Math.round(n).toLocaleString('en-IN');
+let schedule=[],currentYear=1;
+
+function sync(range,num,out,fmtFn){
+  const upd=v=>{ if(out) out.textContent=fmtFn?fmtFn(v):v; };
+  range.addEventListener('input',()=>{num.value=range.value;upd(range.value);calc();});
+  num.addEventListener('input',()=>{range.value=num.value;upd(num.value);calc();});
+  upd(range.value);
+}
+sync($('amt'),$('amtNum'),$('amtOut'),fmt);
+sync($('rate'),$('rateNum'),$('rateOut'),v=>v+'%');
+sync($('yrs'),$('yrsNum'),$('yrsOut'),v=>v+' yr');
+
+function calc(){
+  const P=parseFloat($('amtNum').value)||0;
+  const annual=parseFloat($('rateNum').value)||0;
+  const years=parseInt($('yrsNum').value)||0;
+  const n=years*12, r=annual/1200;
+  const emi = r===0 ? P/n : P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1);
+  const total=emi*n, interest=total-P;
+
+  $('emiVal').textContent=fmt(emi);
+  $('intVal').textContent=fmt(interest);
+  $('totVal').textContent=fmt(total);
+
+  schedule=[]; let bal=P;
+  for(let m=1;m<=n;m++){
+    const intPart=bal*r, prinPart=emi-intPart;
+    bal=Math.max(0,bal-prinPart);
+    schedule.push({m,emi,prin:prinPart,int:intPart,bal});
+  }
+  drawPie(P,interest);
+  drawBar(years);
+  buildTabs(years);
+  renderYear(Math.min(currentYear,years||1));
+}
+
+const svgns='http://www.w3.org/2000/svg';
+function svgEl(tag,attrs){
+  const el=document.createElementNS(svgns,tag);
+  for(const k in attrs) el.setAttribute(k,attrs[k]);
+  return el;
+}
+
+function drawPie(P,interest){
+  const css=getComputedStyle(document.documentElement);
+  const teal=css.getPropertyValue('--teal').trim(), gold=css.getPropertyValue('--gold').trim();
+  const total=P+interest||1, prinPct=P/total, r=80, c=2*Math.PI*r;
+  const prinLen=c*prinPct;
+  const svg=$('pie'); svg.innerHTML='';
+  svg.appendChild(svgEl('circle',{cx:100,cy:100,r,fill:'none',stroke:gold,'stroke-width':24}));
+  const arc=svgEl('circle',{cx:100,cy:100,r,fill:'none',stroke:teal,'stroke-width':24,
+    'stroke-dasharray':`${prinLen} ${c-prinLen}`,transform:'rotate(-90 100 100)','data-testid':'pie-principal-arc'});
+  svg.appendChild(arc);
+  document.querySelector('[data-testid="pie-principal-pct"]').textContent=Math.round(prinPct*100)+'%';
+  document.querySelector('[data-testid="pie-interest-pct"]').textContent=Math.round((1-prinPct)*100)+'%';
+}
+
+function drawBar(years){
+  const css=getComputedStyle(document.documentElement);
+  const teal=css.getPropertyValue('--teal').trim(), gold=css.getPropertyValue('--gold').trim();
+  const svg=$('bar'); svg.innerHTML='';
+  const yrPrin=[],yrInt=[];
+  for(let y=1;y<=years;y++){
+    const chunk=schedule.slice((y-1)*12,y*12);
+    yrPrin.push(chunk.reduce((s,x)=>s+x.prin,0));
+    yrInt.push(chunk.reduce((s,x)=>s+x.int,0));
+  }
+  const maxTotal=Math.max(...yrPrin.map((p,i)=>p+yrInt[i]),1);
+  const chartH=160,baseY=180,gap=6,barW=(480-gap*(years-1))/years||20;
+  for(let y=0;y<years;y++){
+    const x=10+y*(barW+gap);
+    const prinH=(yrPrin[y]/maxTotal)*chartH, intH=(yrInt[y]/maxTotal)*chartH;
+    svg.appendChild(svgEl('rect',{x,y:baseY-prinH,width:barW,height:prinH,fill:teal,
+      'data-testid':`bar-year-${y+1}-principal`}));
+    svg.appendChild(svgEl('rect',{x,y:baseY-prinH-intH,width:barW,height:intH,fill:gold,
+      'data-testid':`bar-year-${y+1}-interest`}));
+    if(years<=15||((y+1)%2===0)){
+      const label=svgEl('text',{x:x+barW/2,y:196,'text-anchor':'middle',class:'bar-label',
+        'data-testid':`bar-year-${y+1}-label`});
+      label.textContent='Y'+(y+1);
+      svg.appendChild(label);
+    }
+  }
+}
+
+function buildTabs(years){
+  const tabs=$('tabs'); tabs.innerHTML='';
+  for(let y=1;y<=years;y++){
+    const b=document.createElement('button');
+    b.textContent='Year '+y;
+    b.dataset.testid='year-tab-'+y;
+    b.className=y===currentYear?'active':'';
+    b.onclick=()=>{currentYear=y;renderYear(y);[...tabs.children].forEach(c=>c.classList.remove('active'));b.classList.add('active');};
+    tabs.appendChild(b);
+  }
+}
+
+function renderYear(y){
+  currentYear=y;
+  const chunk=schedule.slice((y-1)*12,y*12);
+  $('tbody').innerHTML=chunk.map(r=>
+    `<tr data-testid="row-month-${r.m}"><td>${r.m}</td><td>${fmt(r.emi)}</td><td>${fmt(r.prin)}</td><td>${fmt(r.int)}</td><td>${fmt(r.bal)}</td></tr>`).join('');
+}
+
+calc();
+</script>
+</body>
+</html>
