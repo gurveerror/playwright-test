@@ -1,0 +1,84 @@
+2026-09-27 16:16:27 [INFO] test_loan_calculator: Navigating to loan-calculator.html
+2026-09-27 16:16:29 [INFO] test_loan_calculator: Navigating to loan-calculator.html
+2026-09-27 16:16:31 [INFO] test_loan_calculator: Navigating to loan-calculator.html
+2026-09-27 16:16:32 [INFO] test_loan_calculator: Navigating to loan-calculator.html
+2026-09-27 16:16:34 [INFO] test_loan_calculator: Navigating to loan-calculator.html
+2026-09-27 16:16:35 [INFO] test_loan_calculator: Navigating to loan-calculator.html
+2026-09-27 16:17:07 [INFO] test_loan_calculator: Navigating to file://C:\Users\gurve\PycharmProjects\GSSA\playwright\test\loan-calculator.html
+2026-09-27 16:17:08 [INFO] test_loan_calculator: Checking EMI/interest/total render a value on load
+2026-09-27 16:17:08 [INFO] test_framework: PASSED | test_loan_calculator.py::test_emi_calculates_on_load[chromium] | 0.05s
+2026-09-27 16:17:09 [INFO] test_loan_calculator: Navigating to file://C:\Users\gurve\PycharmProjects\GSSA\playwright\test\loan-calculator.html
+2026-09-27 16:17:10 [INFO] test_loan_calculator: EMI before amount change: 24618.00
+2026-09-27 16:17:10 [INFO] test_loan_calculator: EMI after amount change to 5,000,000: 49237.00
+2026-09-27 16:17:10 [INFO] test_framework: PASSED | test_loan_calculator.py::test_changing_loan_amount_updates_emi[chromium] | 0.14s
+2026-09-27 16:17:11 [INFO] test_loan_calculator: Navigating to file://C:\Users\gurve\PycharmProjects\GSSA\playwright\test\loan-calculator.html
+2026-09-27 16:17:11 [INFO] test_loan_calculator: P=1000000 rate=9% years=10 -> expected EMI=12667.58, shown EMI=12668.00
+2026-09-27 16:17:11 [INFO] test_framework: PASSED | test_loan_calculator.py::test_emi_matches_formula[chromium] | 0.31s
+2026-09-27 16:17:12 [INFO] test_loan_calculator: Navigating to file://C:\Users\gurve\PycharmProjects\GSSA\playwright\test\loan-calculator.html
+2026-09-27 16:17:12 [INFO] test_loan_calculator: Clicking Year 2 tab and checking schedule filters to months 13-24
+2026-09-27 16:17:12 [INFO] test_framework: PASSED | test_loan_calculator.py::test_year_tabs_filter_schedule[chromium] | 0.13s
+2026-09-27 16:17:13 [INFO] test_loan_calculator: Navigating to file://C:\Users\gurve\PycharmProjects\GSSA\playwright\test\loan-calculator.html
+2026-09-27 16:17:14 [INFO] test_loan_calculator: Year 1 schedule row count: 12 (expected 12)
+2026-09-27 16:17:14 [INFO] test_framework: PASSED | test_loan_calculator.py::test_schedule_row_count_matches_year[chromium] | 0.08s
+2026-09-27 16:17:14 [INFO] test_loan_calculator: Navigating to file://C:\Users\gurve\PycharmProjects\GSSA\playwright\test\loan-calculator.html
+2026-09-27 16:17:15 [INFO] test_loan_calculator: Final balance for a 1-year loan at month 12: 0.00
+2026-09-27 16:17:15 [INFO] test_framework: PASSED | test_loan_calculator.py::test_balance_decreases_to_near_zero_at_end[chromium] | 0.10s
+2026-09-27 16:19:10 [INFO] test_posts_api: test_excessively_long_title | payload={'title': '<100000 chars>', 'body': 'boundary test', 'userId': 1} | status=201 | response={
+  "title": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+2026-09-27 16:19:10 [INFO] test_framework: PASSED | test_posts_api.py::TestPostBoundaryAndInvalidData::test_excessively_long_title | 0.58s
+2026-09-27 16:19:10 [INFO] test_posts_api: test_unsupported_special_characters | payload={'title': "😀 emoji, SQLi: '; DROP TABLE posts;-- , XSS: <script>alert(1)</script>, null:\x00, zero-width:\u200b", 'body': 'special characters test', 'userId': 1} | status=201 | response={
+  "title": "😀 emoji, SQLi: '; DROP TABLE posts;-- , XSS: <script>alert(1)</script>, null:\u0000, zero-width:​",
+  "body": "special characters test",
+  "userId": 1,
+  "id": 101
+}
+2026-09-27 16:19:10 [INFO] test_framework: PASSED | test_posts_api.py::TestPostBoundaryAndInvalidData::test_unsupported_special_characters | 0.10s
+2026-09-27 16:19:10 [INFO] test_posts_api: test_missing_required_field_userid | payload={'title': 'missing userId', 'body': 'boundary test'} | status=201 | response={
+  "title": "missing userId",
+  "body": "boundary test",
+  "id": 101
+}
+2026-09-27 16:19:10 [INFO] test_framework: PASSED | test_posts_api.py::TestPostBoundaryAndInvalidData::test_missing_required_field_userid | 0.10s
+2026-09-27 16:19:10 [INFO] test_posts_api: test_missing_all_fields | payload={} | status=201 | response={
+  "id": 101
+}
+2026-09-27 16:19:10 [INFO] test_framework: PASSED | test_posts_api.py::TestPostBoundaryAndInvalidData::test_missing_all_fields | 0.10s
+2026-09-27 16:19:10 [INFO] test_posts_api: test_wrong_data_types | payload={'title': 12345, 'body': ['not', 'a', 'string'], 'userId': 'not-an-int'} | status=201 | response={
+  "title": 12345,
+  "body": [
+    "not",
+    "a",
+    "string"
+  ],
+  "userId": "not-an-int",
+  "id": 101
+}
+2026-09-27 16:19:10 [INFO] test_framework: PASSED | test_posts_api.py::TestPostBoundaryAndInvalidData::test_wrong_data_types | 0.10s
+2026-09-27 16:19:10 [INFO] test_posts_api: test_malformed_json_body | payload={ this is not valid json | status=500 | response=SyntaxError: Unexpected token " in JSON at position 0
+    at JSON.parse (<anonymous>)
+    at createStrictSyntaxError (/app/node_modules/body-parser/lib/types/json.js:158:10)
+    at parse (/app/node_modules/body-parser/lib/types/json.js:83:15)
+    at /app/node_modules/body-parser/lib/read.js:121:18
+    at invokeCallback (/app/node_modules/body-parser/node_modules/raw-body/index.js:224:16)
+    at done (/app/node_modules/body-parser/node_modules/raw-body/index.js:213:7)
+    at IncomingMessage.onEnd
+2026-09-27 16:19:10 [INFO] test_framework: SKIPPED | test_posts_api.py::TestPostBoundaryAndInvalidData::test_malformed_json_body | 0.10s
+2026-09-27 16:33:02 [INFO] test_loan_calculator: Navigating to file://C:\Users\gurve\PycharmProjects\GSSA\playwright\test\loan-calculator.html
+2026-09-27 16:33:03 [INFO] test_loan_calculator: Checking EMI/interest/total render a value on load
+2026-09-27 16:33:03 [INFO] test_framework: PASSED | test_loan_calculator.py::test_emi_calculates_on_load[chromium] | 0.06s
+2026-09-27 16:33:05 [INFO] test_loan_calculator: Navigating to file://C:\Users\gurve\PycharmProjects\GSSA\playwright\test\loan-calculator.html
+2026-09-27 16:33:05 [INFO] test_loan_calculator: EMI before amount change: 24618.00
+2026-09-27 16:33:05 [INFO] test_loan_calculator: EMI after amount change to 5,000,000: 49237.00
+2026-09-27 16:33:05 [INFO] test_framework: PASSED | test_loan_calculator.py::test_changing_loan_amount_updates_emi[chromium] | 0.14s
+2026-09-27 16:33:06 [INFO] test_loan_calculator: Navigating to file://C:\Users\gurve\PycharmProjects\GSSA\playwright\test\loan-calculator.html
+2026-09-27 16:33:07 [INFO] test_loan_calculator: P=1000000 rate=9% years=10 -> expected EMI=12667.58, shown EMI=12668.00
+2026-09-27 16:33:07 [INFO] test_framework: PASSED | test_loan_calculator.py::test_emi_matches_formula[chromium] | 0.27s
+2026-09-27 16:33:07 [INFO] test_loan_calculator: Navigating to file://C:\Users\gurve\PycharmProjects\GSSA\playwright\test\loan-calculator.html
+2026-09-27 16:33:08 [INFO] test_loan_calculator: Clicking Year 2 tab and checking schedule filters to months 13-24
+2026-09-27 16:33:08 [INFO] test_framework: PASSED | test_loan_calculator.py::test_year_tabs_filter_schedule[chromium] | 0.11s
+2026-09-27 16:33:09 [INFO] test_loan_calculator: Navigating to file://C:\Users\gurve\PycharmProjects\GSSA\playwright\test\loan-calculator.html
+2026-09-27 16:33:10 [INFO] test_loan_calculator: Year 1 schedule row count: 12 (expected 12)
+2026-09-27 16:33:10 [INFO] test_framework: PASSED | test_loan_calculator.py::test_schedule_row_count_matches_year[chromium] | 0.05s
+2026-09-27 16:33:10 [INFO] test_loan_calculator: Navigating to file://C:\Users\gurve\PycharmProjects\GSSA\playwright\test\loan-calculator.html
+2026-09-27 16:33:11 [INFO] test_loan_calculator: Final balance for a 1-year loan at month 12: 0.00
+2026-09-27 16:33:11 [INFO] test_framework: PASSED | test_loan_calculator.py::test_balance_decreases_to_near_zero_at_end[chromium] | 0.11s
